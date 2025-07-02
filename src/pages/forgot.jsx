@@ -4,44 +4,70 @@ import { supabase } from "../lib/supabaseClient";
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleReset = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'http://localhost:5173/reset-password', // Sesuaikan
+      redirectTo: 'https://cipta-hospital-omega.vercel.app/reset-password',
     });
 
     if (error) {
-      return alert(error.message);
+      alert(error.message);
+      setLoading(false);
+      return;
     }
 
     setMessage("Link reset password telah dikirim ke email kamu.");
+    setLoading(false);
   };
 
   return (
-    <div className="h-screen bg-[var(--fourty-color)] -mt-35 flex items-center justify-center ">
-      <div className="bg-white p-8 rounded shadow w-full max-w-md">
-        <h2 className="text-xl font-bold text-center text-blue-600 mb-4">
-          Lupa Password
+    <div className="min-h-screen -mt-40 bg-[var(--fourty-color)] flex items-center justify-center px-4 py-12">
+      <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-8 animate-fade-in">
+        <h2 className="text-2xl font-bold text-center text-[var(--primary-color)] mb-2">
+          🔒 Lupa Password
         </h2>
+        <p className="text-center text-gray-600 mb-6 text-sm">
+          Masukkan email yang terdaftar, kami akan mengirimkan link reset.
+        </p>
+
         <form onSubmit={handleReset} className="space-y-4">
-          <input
-            type="email"
-            placeholder="Masukkan email kamu"
-            className="w-full border px-4 py-2 rounded"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+          <div>
+            <label className="text-gray-700 text-sm font-medium mb-1 block">
+              Email
+            </label>
+            <input
+              type="email"
+              placeholder="email@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
+              required
+              disabled={loading}
+            />
+          </div>
+
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+            disabled={loading}
+            className={`w-full py-2 text-white font-semibold rounded-lg transition ${
+              loading
+                ? "bg-blue-300 cursor-not-allowed"
+                : "bg-[var(--primary-color)] hover:bg-[var(--secondary-color)]"
+            }`}
           >
-            Kirim Link Reset
+            {loading ? "Mengirim..." : "Kirim Link Reset"}
           </button>
         </form>
-        {message && <p className="text-green-600 mt-4 text-center">{message}</p>}
+
+        {message && (
+          <div className="mt-4 text-center text-green-600 font-medium">
+            {message}
+          </div>
+        )}
       </div>
     </div>
   );
