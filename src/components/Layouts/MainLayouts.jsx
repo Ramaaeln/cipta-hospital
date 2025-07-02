@@ -46,9 +46,9 @@ export default function MainLayouts() {
             : "bg-transparent"
         }`}
       >
-        <div className="flex items-center">
+        <div className="flex items-center gap-4">
           <img src={Icon} alt="" className="h-12" />
-          <h1 className="font-bold text-2xl">Cipta Hospital Indonesia</h1>
+          <h1 className="font-bold text-2xl">CIPTA HOSPITAL INDONESIA</h1>
         </div>
         <div className="gap-2 flex">
           {isAtRoot ? (
@@ -69,7 +69,8 @@ export default function MainLayouts() {
           <Link to="/login" className="  p-1">
             Login
           </Link>
-          <Link className="bg-[var(--primary-color)] rounded-sm p-1">
+          <Link to='/register' className="hover:bg-[var(--primary-color)] hover:text-white transition duration-300 ease-in-out
+ rounded-sm p-1">
             Register
           </Link>
         </div>
